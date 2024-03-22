@@ -44307,17 +44307,20 @@ scene.add(camera);
 
 //4. 添加物體
 //創建幾何體
-var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+var geometry = new THREE.BufferGeometry();
+var vertices = new Float32Array([-1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0]);
+geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+
 //材質
-var cubeMaterial = new THREE.MeshBasicMaterial({
+var material = new THREE.MeshBasicMaterial({
   color: 0xfff00
 });
 
 // Mesh網格: 根據幾何體和材質創建物體
-var cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+var mesh = new THREE.Mesh(geometry, material);
 
 //5.將幾何體添加到場景當中
-scene.add(cube);
+scene.add(mesh);
 
 // 6. 初始化渲染器
 var renderer = new THREE.WebGLRenderer();
@@ -44421,7 +44424,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14566" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1086" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -23,24 +23,28 @@ scene.add(camera);
 
 //4. 添加物體
 //創建幾何體
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+const geometry = new THREE.BufferGeometry();
+
+const vertices = new Float32Array([
+  -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
+  -1.0, -1.0, 1.0,
+]);
+geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+
 //材質
-const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xfff00 });
+const material = new THREE.MeshBasicMaterial({ color: 0xfff00 });
 
 // Mesh網格: 根據幾何體和材質創建物體
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
-
-
+const mesh = new THREE.Mesh(geometry, material);
 
 //5.將幾何體添加到場景當中
-scene.add(cube);
+scene.add(mesh);
 
 // 6. 初始化渲染器
 const renderer = new THREE.WebGLRenderer();
 
 // 設置渲染器尺寸大小
 renderer.setSize(window.innerWidth, window.innerHeight);
-
 
 //7.將webgl 渲染的canvas內容添加到body
 document.body.appendChild(renderer.domElement);
@@ -56,7 +60,6 @@ controls.enableDamping = true;
 // 添加坐標軸輔助器
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
-
 
 //07. 設置動畫
 const animate1 = gsap.to(cube.position, {
