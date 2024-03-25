@@ -4,7 +4,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 //導入動畫庫
 import gsap from "gsap";
 
-//08目標: 根據window尺寸變化自適應畫面
+//05目標: 紋理的顯示算法(適用於像素較低的圖片,也可以顯示)
 
 // 1. 創建場景
 const scene = new THREE.Scene();
@@ -21,24 +21,27 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 0, 10);
 scene.add(camera);
 
+//03. 導入紋理
+const texture = new THREE.TextureLoader();
+const doorColorTexture = textureLoader.load("./textures/door.jpg");
+
+
+//05.texture 紋理顯示設置
+texture.minFilter = THREE.NearestFilter
+texture.magFilter = THREE.NearestFilter
+//這兩個擇一用
+// texture.minFilter = THREE.LinearFilter
+// texture.magFilter = THREE.LinearFilter
 //4. 添加物體
-//創建幾何體
-const geometry = new THREE.BufferGeometry();
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+// 材質
+const basicMaterial = new THREE.MeshBasicMaterial({
+  color: "#b0b0b0",
+  map: doorColorTexture,
+});
 
-const vertices = new Float32Array([
-  -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,
-  -1.0, -1.0, 1.0,
-]);
-geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-
-//材質
-const material = new THREE.MeshBasicMaterial({ color: 0xfff00 });
-
-// Mesh網格: 根據幾何體和材質創建物體
-const mesh = new THREE.Mesh(geometry, material);
-
-//5.將幾何體添加到場景當中
-scene.add(mesh);
+const cube = new THREE.Mesh(cubeGeometry, basicMaterial);
+scene.add(cube);
 
 // 6. 初始化渲染器
 const renderer = new THREE.WebGLRenderer();
@@ -60,43 +63,6 @@ controls.enableDamping = true;
 // 添加坐標軸輔助器
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
-
-//07. 設置動畫
-const animate1 = gsap.to(cube.position, {
-  x: 5,
-  duration: 5,
-  ease: "power1.out",
-  onComplete: () => {
-    console.log("動畫完成");
-  },
-  onStart: () => {
-    console.log("動畫開始");
-  },
-  //設置重複(次數), 無限次循環-1
-  repeat: -1,
-  //往返運動
-  yoyo: true,
-
-  //delay,延遲兩秒運動
-  delay: 0.5,
-});
-gsap.to(cube.rotation, {
-  x: 2 * Math.PI,
-  duration: 5,
-  ease: "power1.out",
-});
-
-//畫面雙擊
-window.addEventListener("dblclick", () => {
-  // 動畫在執行的時候
-  if (animate1.isActive()) {
-    //暫停
-    animate1.pause();
-  } else {
-    //恢復
-    animate1.resume();
-  }
-});
 
 function render() {
   controls.update();

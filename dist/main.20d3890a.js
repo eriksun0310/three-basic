@@ -44286,7 +44286,7 @@ function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; 
 
 //導入動畫庫
 
-//08目標: 根據window尺寸變化自適應畫面
+//05目標: 紋理的顯示算法(適用於像素較低的圖片,也可以顯示)
 
 // 1. 創建場景
 var scene = new THREE.Scene();
@@ -44305,22 +44305,25 @@ window.innerWidth / window.innerHeight,
 camera.position.set(0, 0, 10);
 scene.add(camera);
 
+//03. 導入紋理
+var texture = new THREE.TextureLoader();
+var doorColorTexture = textureLoader.load("./textures/door.jpg");
+
+//05.texture 紋理顯示設置
+texture.minFilter = THREE.NearestFilter;
+texture.magFilter = THREE.NearestFilter;
+//這兩個擇一用
+// texture.minFilter = THREE.LinearFilter
+// texture.magFilter = THREE.LinearFilter
 //4. 添加物體
-//創建幾何體
-var geometry = new THREE.BufferGeometry();
-var vertices = new Float32Array([-1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0, -1.0, -1.0, 1.0]);
-geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-
-//材質
-var material = new THREE.MeshBasicMaterial({
-  color: 0xfff00
+var cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+// 材質
+var basicMaterial = new THREE.MeshBasicMaterial({
+  color: "#b0b0b0",
+  map: doorColorTexture
 });
-
-// Mesh網格: 根據幾何體和材質創建物體
-var mesh = new THREE.Mesh(geometry, material);
-
-//5.將幾何體添加到場景當中
-scene.add(mesh);
+var cube = new THREE.Mesh(cubeGeometry, basicMaterial);
+scene.add(cube);
 
 // 6. 初始化渲染器
 var renderer = new THREE.WebGLRenderer();
@@ -44342,42 +44345,6 @@ controls.enableDamping = true;
 // 添加坐標軸輔助器
 var axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
-
-//07. 設置動畫
-var animate1 = _gsap.default.to(cube.position, {
-  x: 5,
-  duration: 5,
-  ease: "power1.out",
-  onComplete: function onComplete() {
-    console.log("動畫完成");
-  },
-  onStart: function onStart() {
-    console.log("動畫開始");
-  },
-  //設置重複(次數), 無限次循環-1
-  repeat: -1,
-  //往返運動
-  yoyo: true,
-  //delay,延遲兩秒運動
-  delay: 0.5
-});
-_gsap.default.to(cube.rotation, {
-  x: 2 * Math.PI,
-  duration: 5,
-  ease: "power1.out"
-});
-
-//畫面雙擊
-window.addEventListener("dblclick", function () {
-  // 動畫在執行的時候
-  if (animate1.isActive()) {
-    //暫停
-    animate1.pause();
-  } else {
-    //恢復
-    animate1.resume();
-  }
-});
 function render() {
   controls.update();
   renderer.render(scene, camera);
@@ -44424,7 +44391,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1086" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64108" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
