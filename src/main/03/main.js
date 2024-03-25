@@ -23,7 +23,7 @@ scene.add(camera);
 
 //03. 導入紋理
 const texture = new THREE.TextureLoader();
-const doorColorTexture = textureLoader.load("./textures/door.jpg");
+const doorColorTexture = texture.load("./textures/door.jpg");
 
 
 //05.texture 紋理顯示設置

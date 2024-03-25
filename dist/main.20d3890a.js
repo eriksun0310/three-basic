@@ -44307,7 +44307,7 @@ scene.add(camera);
 
 //03. 導入紋理
 var texture = new THREE.TextureLoader();
-var doorColorTexture = textureLoader.load("./textures/door.jpg");
+var doorColorTexture = texture.load("./textures/door.jpg");
 
 //05.texture 紋理顯示設置
 texture.minFilter = THREE.NearestFilter;
@@ -44391,7 +44391,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64108" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63843" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
